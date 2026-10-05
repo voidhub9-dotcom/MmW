@@ -2361,17 +2361,12 @@ local function _getIcon(title)
 end;
 
 local function _makeTabWrapper(Tab, title)
-    local _leftDone = false;
-    local _curPage  = nil;
-    local _left     = nil;
-    local _right    = nil;
+    local _curPage      = nil;
     local _sectionCount = 0;
 
-    local function _ensurePage(name)
+    local function _ensurePage()
         if not _curPage then
-            _curPage = Tab:AddPage(name or title or "Main", _getIcon(title or ""));
-            _left    = _curPage:AddLeftGroupbox(name or title or "");
-            _right   = _curPage:AddRightGroupbox("");
+            _curPage = Tab:AddPage(title or "Main", _getIcon(title or ""));
         end;
     end;
 
@@ -2379,12 +2374,12 @@ local function _makeTabWrapper(Tab, title)
 
     function T.CreateSection(sectionTitle)
         _sectionCount = _sectionCount + 1;
-        _ensurePage(title);
+        _ensurePage();
         local box;
         if _sectionCount % 2 == 1 then
-            box = _left:AddGroupbox(sectionTitle or "");
+            box = _curPage:AddLeftGroupbox(sectionTitle or "");
         else
-            box = _right:AddGroupbox(sectionTitle or "");
+            box = _curPage:AddRightGroupbox(sectionTitle or "");
         end;
         return _makeSection(box, nil);
     end;
